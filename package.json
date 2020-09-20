@@ -1,0 +1,24 @@
+{
+  "name": "queensblessing-kitchen",
+  "version": "1.0.0",
+  "description": "Kitchen Aid",
+  "main": "index.js",
+  "dependencies": {
+    "electron": "^10.1.2"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "electron ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/thehildebreezy/queensblessing-kitchen.git"
+  },
+  "author": "Tanner Hildebrand",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/thehildebreezy/queensblessing-kitchen/issues"
+  },
+  "homepage": "https://github.com/thehildebreezy/queensblessing-kitchen#readme"
+}
