@@ -9,52 +9,69 @@
         <link rel="stylesheet" href="css/bootstrap.min.css" />
 
     </head>
-    <body>
-        <!-- Define Zones -->
-        <zone id="topbar">
-            <!-- This zone's responsibility is to hold the timers and display information -->
-            <group role="timers" id="timer-group">
-                <timer id="timer-one">   00:00 </timer>
-                <timer id="timer-two">   00:00 </timer>
-                <timer id="timer-three"> 00:00 </timer>
-            </group>
-        </zone>
+    <body >
+        <div class="container-fluid h-100 d-flex flex-column">
+            <div class="row bg-dark text-light">
+                <div class="col-sm-3 p-0">
+                    <button class="btn btn-dark h-100 rounded-0 w-100 text-left">&LeftArrow; Back</button>
+                </div>
+                <div class="col">
+                    <h1>Header</h1>
+                </div>
 
-        <zone id="content">
-            <!-- This zone's responsibility is to hold content and display loaded information -->
-            <loader id="main-loader">
-                <input
-                    type="text"
-                    name="somename"
-                    data-provide="slider"
-                    data-slider-ticks="[1, 2, 3]"
-                    data-slider-ticks-labels='["short", "medium", "long"]'
-                    data-slider-min="1"
-                    data-slider-max="3"
-                    data-slider-step="1"
-                    data-slider-value="3"
-                    data-slider-tooltip="hide"
-                >
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. In laoreet sapien quis purus condimentum maximus. Donec pellentesque sit amet lorem id cursus. Cras auctor risus ac nulla vulputate vulputate id et metus. Sed id risus eleifend sem ullamcorper porta. Praesent rutrum tellus a dolor tristique consectetur ac vitae turpis. Sed eget feugiat ex. Cras malesuada ultrices nisl, eget feugiat velit facilisis et. Sed tincidunt libero sem.
+            </div>
+            <div class="row flex-grow-1">
+                <div class="col-sm-3 p-0 m-0 d-flex flex-column">
+                    
+                    <div class="list-group rounded-0 d-flex flex-column flex-grow-1">
+                        <a href="#" class="list-group-item list-group-item-action">Dapibus ac</a>
+                        <a href="#" class="list-group-item list-group-item-action">facilisis in</a>
+                        <a href="#" class="list-group-item list-group-item-action">invictus</a>
+                        <div class="list-group-item flex-grow-1">
+                            stuff
+                        </div>
+                        <a href="#" class="list-group-item list-group-item-action">Collapse</a>
+                    </div>
 
-Sed mauris turpis, ullamcorper non porttitor at, sodales eu tellus. Aliquam dignissim, libero nec pharetra laoreet, felis orci maximus quam, et tristique risus libero facilisis dolor. Nulla non mattis leo. In blandit est quis egestas vulputate. Nulla iaculis lobortis sem eget aliquam. Praesent lectus lacus, aliquam non lobortis ut, dictum et leo. Quisque volutpat accumsan gravida. Fusce quis cursus justo. Aenean ut mollis arcu. Ut pellentesque ante ac magna convallis, et faucibus lectus accumsan. Nam nec tincidunt nibh. Quisque ultricies arcu turpis, maximus pulvinar nunc varius sit amet. Nullam ut aliquam eros, vel feugiat nibh. Cras id luctus turpis, posuere hendrerit tellus. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Duis molestie tempor justo sed elementum.
-
-Duis pellentesque tincidunt ipsum, nec dictum nisl pellentesque eu. Ut quis risus dapibus, rutrum leo ac, pretium lacus. Praesent iaculis est in metus elementum, sit amet placerat arcu ornare. In gravida lacus nec velit tempor lacinia. Sed ultricies leo ac mattis consectetur. Cras vel nulla gravida, facilisis justo vel, hendrerit mauris. Donec congue odio elit, vel accumsan odio rhoncus iaculis. Suspendisse nulla est, ultricies ac mattis et, finibus sed nunc. Integer purus est, lacinia quis felis sed, ultricies hendrerit erat. Nam ut metus sit amet diam gravida rutrum. Vivamus at ipsum ac enim auctor dictum non eget risus. Morbi iaculis purus non est consectetur cursus. Donec vulputate porttitor velit tempus volutpat. Sed mattis tortor eget dolor gravida, ac posuere tellus vulputate.
-
-Nullam euismod nisi ut vehicula aliquam. Ut tristique quam sit amet quam facilisis, nec consequat ligula semper. Aliquam eget porttitor ligula. Vestibulum nibh erat, varius sed pulvinar a, mattis sed ligula. Praesent arcu ante, ornare a leo sit amet, porttitor pretium lacus. Aenean mi purus, consequat in viverra varius, volutpat sit amet quam. Quisque feugiat, eros eu tincidunt sagittis, tellus leo semper nibh, vitae fringilla lectus lacus ut turpis. Nunc non orci nunc. Interdum et malesuada fames ac ante ipsum primis in faucibus. Cras gravida vel lectus id interdum. Ut eu aliquam nulla. Praesent rutrum vehicula ex, a bibendum velit faucibus egestas.
-
-Ut eget augue iaculis, finibus libero ut, iaculis neque. Cras faucibus nisl felis, eleifend tempus lectus egestas in. Nulla fringilla venenatis purus, id gravida enim ullamcorper vel. Fusce pharetra erat eget elementum fermentum. Donec tellus justo, cursus a finibus tincidunt, eleifend eu nunc. Aenean a felis nulla. Morbi nulla ligula, tempor ut congue ut, faucibus a magna. Suspendisse sed diam id orci efficitur
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. In laoreet sapien quis purus condimentum maximus. Donec pellentesque sit amet lorem id cursus. Cras auctor risus ac nulla vulputate vulputate id et metus. Sed id risus eleifend sem ullamcorper porta. Praesent rutrum tellus a dolor tristique consectetur ac vitae turpis. Sed eget feugiat ex. Cras malesuada ultrices nisl, eget feugiat velit facilisis et. Sed tincidunt libero sem.
-
-Sed mauris turpis, ullamcorper non porttitor at, sodales eu tellus. Aliquam dignissim, libero nec pharetra laoreet, felis orci maximus quam, et tristique risus libero facilisis dolor. Nulla non mattis leo. In blandit est quis egestas vulputate. Nulla iaculis lobortis sem eget aliquam. Praesent lectus lacus, aliquam non lobortis ut, dictum et leo. Quisque volutpat accumsan gravida. Fusce quis cursus justo. Aenean ut mollis arcu. Ut pellentesque ante ac magna convallis, et faucibus lectus accumsan. Nam nec tincidunt nibh. Quisque ultricies arcu turpis, maximus pulvinar nunc varius sit amet. Nullam ut aliquam eros, vel feugiat nibh. Cras id luctus turpis, posuere hendrerit tellus. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Duis molestie tempor justo sed elementum.
-
-Duis pellentesque tincidunt ipsum, nec dictum nisl pellentesque eu. Ut quis risus dapibus, rutrum leo ac, pretium lacus. Praesent iaculis est in metus elementum, sit amet placerat arcu ornare. In gravida lacus nec velit tempor lacinia. Sed ultricies leo ac mattis consectetur. Cras vel nulla gravida, facilisis justo vel, hendrerit mauris. Donec congue odio elit, vel accumsan odio rhoncus iaculis. Suspendisse nulla est, ultricies ac mattis et, finibus sed nunc. Integer purus est, lacinia quis felis sed, ultricies hendrerit erat. Nam ut metus sit amet diam gravida rutrum. Vivamus at ipsum ac enim auctor dictum non eget risus. Morbi iaculis purus non est consectetur cursus. Donec vulputate porttitor velit tempus volutpat. Sed mattis tortor eget dolor gravida, ac posuere tellus vulputate.
-
-Nullam euismod nisi ut vehicula aliquam. Ut tristique quam sit amet quam facilisis, nec consequat ligula semper. Aliquam eget porttitor ligula. Vestibulum nibh erat, varius sed pulvinar a, mattis sed ligula. Praesent arcu ante, ornare a leo sit amet, porttitor pretium lacus. Aenean mi purus, consequat in viverra varius, volutpat sit amet quam. Quisque feugiat, eros eu tincidunt sagittis, tellus leo semper nibh, vitae fringilla lectus lacus ut turpis. Nunc non orci nunc. Interdum et malesuada fames ac ante ipsum primis in faucibus. Cras gravida vel lectus id interdum. Ut eu aliquam nulla. Praesent rutrum vehicula ex, a bibendum velit faucibus egestas.
-
-Ut eget augue iaculis, finibus libero ut, iaculis neque. Cras faucibus nisl felis, eleifend tempus lectus egestas in. Nulla fringilla venenatis purus, id gravida enim ullamcorper vel. Fusce pharetra erat eget elementum fermentum. Donec tellus justo, cursus a finibus tincidunt, eleifend eu nunc. Aenean a felis nulla. Morbi nulla ligula, tempor ut congue ut, faucibus a magna. Suspendisse sed diam id orci efficitur
-            </loader>
-        </zone>
+                </div>
+                <div class="col d-flex flex-column position-relative">
+                    <div class="flex-grow-1 position-absolute overflow-auto p-3" style="top: 0;left:0;right:0;bottom: 0;">
+                        
+                        <div class="card mb-3">
+                            <div class="card-header">
+                              Featured
+                            </div>
+                            <div class="card-body">
+                              <h5 class="card-title">Special title treatment</h5>
+                              <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+                              <a href="#" class="btn btn-primary">Go somewhere</a>
+                            </div>
+                          </div>
+                          <div class="card mb-3">
+                            <div class="card-header">
+                              Featured
+                            </div>
+                            <div class="card-body">
+                              <h5 class="card-title">Special title treatment</h5>
+                              <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+                              <a href="#" class="btn btn-primary">Go somewhere</a>
+                            </div>
+                          </div>
+                          <div class="card mb-3">
+                            <div class="card-header">
+                              Featured
+                            </div>
+                            <div class="card-body">
+                              <h5 class="card-title">Special title treatment</h5>
+                              <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+                              <a href="#" class="btn btn-primary">Go somewhere</a>
+                            </div>
+                          </div>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
 
         <script type="text/javascript" src="js/jquery-3.0.0.slim.min.js"></script>
         <script type="text/javascript" src="js/bootstrap.min.js"></script>
