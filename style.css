@@ -6,3 +6,61 @@ body, html {
     height: 100%;
     width: 100%;
 }
+
+body {
+    background: rgb(34,193,195);
+    background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+    background-size: 400% 400%;
+    animation: spinback 15s ease infinite;
+}
+
+@keyframes spinback {
+    0% {
+		background-position: 0% 50%;
+	}
+	50% {
+		background-position: 100% 50%;
+	}
+	100% {
+		background-position: 0% 50%;
+	}
+}
+
+.text-shadow {
+    text-shadow: 2px 2px #000000;
+}
+
+a.no-underline:hover {
+    text-decoration: none;
+    opacity: .8;
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+    width: 0px;  /* Remove scrollbar space */
+    background: transparent;  /* Optional: just make scrollbar invisible */
+}
+
+.opacity-75 {
+    opacity: .75;
+}
+
+.text-larger {
+    font-size: 1.2rem;
+}
+
+.collapse-bar {
+    transition: max-width 1s ease;
+    overflow: hidden;
+}
+
+.collapse-bar.collapsed {
+    max-width: 32px !important;
+}
+
+#collapse::before {
+    content: "\00ab\00a0"
+}
+
+.collapse-bar.collapsed #collapse::before {
+    content: "\00bb\00a0"
+}

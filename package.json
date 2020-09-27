@@ -4,7 +4,8 @@
   "description": "Kitchen Aid",
   "main": "index.js",
   "dependencies": {
-    "electron": "^10.1.2"
+    "electron": "^10.1.2",
+    "jquery": "^3.5.1"
   },
   "devDependencies": {},
   "scripts": {
