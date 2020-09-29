@@ -26,7 +26,7 @@
                 <div class="col-2 p-0 m-0 d-flex flex-column text-shadow text-larger collapse-bar overflow-hidden text-nowrap">
                     
                     <div class="list-group rounded-0 d-flex text-white bg-transparent flex-column flex-grow-1" >
-                        <a href="#" class="list-group-item text-white border-0 bg-transparent no-underline">Favorites</a>
+                        <a href="#" class="list-group-item text-white border-0 bg-transparent no-underline" id="loadcards" >Favorites</a>
                         <a href="#" class="list-group-item text-white border-0 bg-transparent  no-underline">Search</a>
                         <a href="#" class="list-group-item text-white border-0 bg-transparent  no-underline">Random</a>
                         <a href="#" class="list-group-item text-white border-0 bg-transparent  no-underline">Shopping</a>
@@ -38,39 +38,11 @@
 
                 </div>
                 <div class="col d-flex flex-column position-relative overflow-hidden">
-                    <div class="flex-grow-1 position-absolute overflow-auto p-3 hide-scrollbar" style="top: 0;left:0;right:0;bottom: 0;">
+                    <div id="cards" class="flex-grow-1 position-absolute overflow-auto p-3 hide-scrollbar" style="top: 0;left:0;right:0;bottom: 0;">
                         
-                        <div class="card mb-3 shadow" style="background: rgba(255,255,255,0.8);">
-                            <div class="card-header">
-                              Featured
-                            </div>
-                            <div class="card-body">
-                              <h5 class="card-title">Special title treatment</h5>
-                              <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                              <a href="#" class="btn btn-light opacity-75">Go somewhere</a>
-                            </div>
-                          </div>
+                        <div class="row" id="loadpoint">
 
-                          <div class="card mb-3">
-                            <div class="card-header">
-                              Featured
-                            </div>
-                            <div class="card-body">
-                              <h5 class="card-title">Special title treatment</h5>
-                              <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                              <a href="#" class="btn btn-primary">Go somewhere</a>
-                            </div>
-                          </div>
-                          <div class="card mb-3">
-                            <div class="card-header">
-                              Featured
-                            </div>
-                            <div class="card-body">
-                              <h5 class="card-title">Special title treatment</h5>
-                              <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                              <a href="#" class="btn btn-primary">Go somewhere</a>
-                            </div>
-                          </div>
+                        </div>
                         
                     </div>
                 </div>
@@ -78,6 +50,8 @@
         </div>
 
         <script type="text/javascript" src="js/bootstrap.min.js"></script>
+        <script type="text/javascript" src="js/config.js"></script>
         <script type="text/javascript" src="js/queensblessing.js"></script>
+        
     </body>
 </html>
