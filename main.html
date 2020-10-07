@@ -15,10 +15,10 @@
         <div class="container-fluid h-100 d-flex flex-column">
             <div class="row text-white text-shadow" style="border-bottom:1px solid rgba(0,0,0,.2);">
                 <div class="col-2 p-0 collapse-bar text-nowrap" style="border-bottom:1px solid rgba(255,255,255,.1);">
-                    <button class="btn bg-transparent text-white text-shadow h-100 rounded-0 w-100 text-left">&LeftArrow; Back</button>
+                    <button class="btn bg-transparent text-white text-shadow h-100 rounded-0 w-100 text-left" id="backbutton">&LeftArrow; Back</button>
                 </div>
                 <div class="col" style="border-bottom:1px solid rgba(255,255,255,.2);">
-                    <h1 class="p-0 m-0 pt-1 pb-1">Favorites</h1>
+                    <h1 class="p-0 m-0 pt-1 pb-1" id="pagetitle">Favorites</h1>
                 </div>
 
             </div>
@@ -27,9 +27,10 @@
                     
                     <div class="list-group rounded-0 d-flex text-white bg-transparent flex-column flex-grow-1" >
                         <a href="#" class="list-group-item text-white border-0 bg-transparent no-underline" id="loadcards" >Favorites</a>
-                        <a href="#" class="list-group-item text-white border-0 bg-transparent  no-underline">Search</a>
-                        <a href="#" class="list-group-item text-white border-0 bg-transparent  no-underline">Random</a>
-                        <a href="#" class="list-group-item text-white border-0 bg-transparent  no-underline">Shopping</a>
+                        <a href="#" class="list-group-item text-white border-0 bg-transparent no-underline" id="searchrecipes">Search</a>
+                        <a href="#" class="list-group-item text-white border-0 bg-transparent no-underline" id="randomrecipe">Random</a>
+                        <a href="#" class="list-group-item text-white border-0 bg-transparent no-underline" id="shoppinglist">Shopping</a>
+                        <a href="#" class="list-group-item text-white border-0 bg-transparent no-underline" id="timersoverlay">Timers</a>
                         <div class="list-group-item flex-grow-1 border-0 bg-transparent ">
                             
                         </div>
@@ -37,14 +38,7 @@
                     </div>
 
                 </div>
-                <div class="col d-flex flex-column position-relative overflow-hidden">
-                    <div id="cards" class="flex-grow-1 position-absolute overflow-auto p-3 hide-scrollbar" style="top: 0;left:0;right:0;bottom: 0;">
-                        
-                        <div class="row" id="loadpoint">
-
-                        </div>
-                        
-                    </div>
+                <div class="col d-flex flex-column position-relative overflow-hidden" id="loadpoint">
                 </div>
             </div>
         </div>

@@ -65,3 +65,32 @@ a.no-underline:hover {
 .collapse-bar.collapsed #collapse::before {
     content: "\00bb\00a0"
 }
+
+.single-recipe {
+    font-size: 1.2em;
+}
+
+.single-recipe .ingredients-list {
+    column-count: 3;
+}
+
+.single-recipe li {
+    margin-bottom: 4px;
+}
+
+
+.single-recipe ul li {
+    list-style: none;
+    margin-left: 0;
+    padding-left: 0;
+}
+
+.single-recipe ul li.checked::before {
+    content:"\2713\0020";
+    position: absolute;
+    margin-left: -22px;
+}
+
+.single-recipe ol li {
+    margin-top: 16px;
+}

@@ -1,0 +1,85 @@
+<div class="col position-relative">
+  <div class="card mb-3 shadow" style="background: rgba(255,255,255,0.8);">
+      <div class="card-header">Search</div>
+      
+      <div class="card-body">
+        <div class="input-group mb-3">
+            <div class="input-group-prepend">
+              <span class="input-group-text" id="basic-addon1">Search query</span>
+            </div>
+            <input id="searchquery" type="text" class="form-control" placeholder="Search query" aria-label="Query" >
+        </div>
+        
+        <div class="input-group mb-3">
+            <div class="input-group-prepend">
+              <span class="input-group-text" id="basic-addon3">Number of results</span>
+            </div>
+            <select id="numberresults" class="custom-select" id="a">
+                <option value="10" selected>10</option>
+                <option value="25">25</option>
+                <option value="50">50</option>
+                <option value="100">100</option>
+            </select>
+        </div>
+      </div>
+
+      <div class="card-header">
+          Ingredients
+      </div>
+      <div class="card-body">
+        <div class="form-check form-check-inline">
+            <input name="ingredients_group" class="form-check-input" type="checkbox" id="inlineCheckbox1" value="chicken">
+            <label class="form-check-label" for="inlineCheckbox1">Chicken</label>
+        </div>
+        <div class="form-check form-check-inline">
+            <input name="ingredients_group" class="form-check-input" type="checkbox" id="inlineCheckbox2" value="beef">
+            <label class="form-check-label" for="inlineCheckbox2">Beef</label>
+        </div>
+        <div class="form-check form-check-inline">
+            <input name="ingredients_group" class="form-check-input" type="checkbox" id="inlineCheckbox3" value="pork">
+            <label class="form-check-label" for="inlineCheckbox3">Pork</label>
+        </div>
+        <div class="form-check form-check-inline">
+            <input name="ingredients_group" class="form-check-input" type="checkbox" id="inlineCheckbox4" value="fish">
+            <label class="form-check-label" for="inlineCheckbox4">Fish</label>
+        </div>
+        <hr />
+        <div class="form-check form-check-inline">
+            <input name="ingredients_group" class="form-check-input" type="checkbox" id="inlineCheckbox5" value="honey">
+            <label class="form-check-label" for="inlineCheckbox5">Honey</label>
+        </div>
+        <div class="form-check form-check-inline">
+            <input name="ingredients_group" class="form-check-input" type="checkbox" id="inlineCheckbox9" value="garlic">
+            <label class="form-check-label" for="inlineCheckbox9">Garlic</label>
+        </div>
+        <div class="form-check form-check-inline">
+            <input name="ingredients_group" class="form-check-input" type="checkbox" id="inlineCheckbox6" value="lemon">
+            <label class="form-check-label" for="inlineCheckbox6">Lemon</label>
+        </div>
+        <div class="form-check form-check-inline">
+            <input name="ingredients_group" class="form-check-input" type="checkbox" id="inlineCheckbox7" value="balsamic">
+            <label class="form-check-label" for="inlineCheckbox7">Balsamic Vinegar</label>
+        </div>
+        <div class="form-check form-check-inline">
+            <input name="ingredients_group" class="form-check-input" type="checkbox" id="inlineCheckbox8" value="panko">
+            <label class="form-check-label" for="inlineCheckbox8">Panko</label>
+        </div>
+      </div>
+
+      <div class="card-header">
+          Cuisine Type
+      </div>
+      <div class="card-body">
+        <select class="custom-select" id="c">
+            <option selected>Choose...</option>
+            <option value="1">One</option>
+            <option value="2">Two</option>
+            <option value="3">Three</option>
+          </select>
+      </div>
+
+      <button type="submit" id="searchbutton" class="btn btn-primary" style="position: sticky; bottom: 0; left: 0; width: 100%;">Search Recipes</button>
+    </div>
+    
+</div>
+

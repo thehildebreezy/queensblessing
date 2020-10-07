@@ -11,6 +11,12 @@ $(function(){
      */
     var changingPages = false;
 
+    hideBackButton()
+
+    $("#backbutton").on('click',function(){
+        popPage();
+    })
+
 
     $("#collapse").on("click",function(){
         var bar = $(".collapse-bar");
@@ -23,13 +29,73 @@ $(function(){
 
 
     $("#loadcards").on("click",function(){
-
-
         // load demo
         loadDemo();
-
-
     })
+    
+    $("#searchrecipes").on("click",function(){
+        loadSearchPage();
+    })
+
+    function loadSearchResults( query ){
+        // layer this business
+        $.get(query, function( data ){
+
+            //var apiData = JSON.parse(data)
+            var apiData = JSON.parse(data);
+            if( !apiData ) return
+
+            if( apiData.results.length == 0 ) return
+
+            newNavPage("Results", searchResultsPage, apiData)
+        })
+
+    }
+
+    function searchResultsPage(page, insert, data){
+        var apiData = data
+        var loadPoint = insert
+        getTemplate('list-card',function(data){
+
+            var el = $(data);
+
+            for( var i=0; i<apiData.results.length; i++ ){
+                var next = el.clone();
+                var link = $("<a>");
+                link.attr('href','#')
+                link.addClass(['stretched-link','text-dark'])
+                link.html(apiData.results[i]["title"])
+
+                link.data("recipe", apiData.results[i]["id"])
+                link.data("image", apiData.results[i]["image"])
+                link.data("title", apiData.results[i]["title"])
+
+                link.on('click',function(){
+                    var item = $(this)
+                    newNavPage(item.data('title'), singleItemPage, item)
+                })
+
+                next.find('.card-header').html("").append(link)
+                next.find('.card-img').attr('src',apiData.results[i]["image"])
+                loadPoint.append(next);
+            }
+        })
+
+    }
+
+    function singleItemPage(page,insert,data){
+        var lp = insert;
+        var item = data;
+        getTemplate('single-recipe',function(data){
+            var el = $(data)
+            fillRecipeFromApiId(el,
+                item.data("recipe"),
+                item.data("image"),
+                item.data('title'))
+            //fillRecipeFromApiId(el,apiData.results[i]["id"])
+            lp.append(el)
+        })
+    }
 
     function loadDemo(){
 
@@ -43,37 +109,210 @@ $(function(){
 
             if( apiData.results.length == 0 ) return
 
-            $.get('templates/list-card.html', function( data ){
+            newPage("Favorites", function(page, insert){
 
-                var el = $(data);
+                var loadPoint = insert
+                getTemplate('list-card',function(data){
 
-                for( var i=0; i<apiData.results.length; i++ ){
-                    var next = el.clone();
-                    var link = $("<a>");
-                    link.attr('href','#')
-                    link.addClass(['stretched-link','text-dark'])
-                    link.html(apiData.results[i]["title"])
-                    next.find('.card-header').html("").append(link)
-                    next.find('.card-img').attr('src',apiData.results[i]["image"])
-                    next.hide()
-                    
-                    $("#loadpoint").append(next);
-                    next.fadeIn();
+                    var el = $(data);
+
+                    for( var i=0; i<apiData.results.length; i++ ){
+                        var next = el.clone();
+                        var link = $("<a>");
+                        link.attr('href','#')
+                        link.addClass(['stretched-link','text-dark'])
+                        link.html(apiData.results[i]["title"])
+
+                        link.data("recipe", apiData.results[i]["id"])
+                        link.data("image", apiData.results[i]["image"])
+                        link.data("title", apiData.results[i]["title"])
+
+                        link.on('click',function(){
+                            var item = $(this)
+                            newPage(item.data('title'), function(page,insert){
+                                var lp = insert;
+                                getTemplate('single-recipe',function(data){
+                                    var el = $(data)
+                                    fillRecipeFromApiId(el,
+                                        item.data("recipe"),
+                                        item.data("image"),
+                                        item.data('title'))
+                                    //fillRecipeFromApiId(el,apiData.results[i]["id"])
+                                    lp.append(el)
+                                })
+                            })
+                        })
+
+                        next.find('.card-header').html("").append(link)
+                        next.find('.card-img').attr('src',apiData.results[i]["image"])
+                        loadPoint.append(next);
+                    }
+                })
+
+            }, true)
+        })
+
+    }
+    
+    function fillRecipeFromApiId( el, id, image, title ){
+        //el.find(".card-header").html(title)
+        el.find(".card-img").attr("src",image)
+
+        var ingredients  = el.find(".ingredients-list")
+        var instructions = el.find(".instructions-list")
+
+        var usedIngredients = []
+
+        var query_string = request_single_string(id)
+
+        $.get(query_string, function(data){
+
+            var apiData = JSON.parse(data)
+            if( !apiData ) return;
+            
+            var steps = apiData[0]["steps"]
+
+            for( var i=0; i<steps.length; i++ ){
+                instructions.append($("<li>").html(steps[i]["step"]))
+                var ingreds = steps[i]["ingredients"]
+                for( var j=0; j<ingreds.length; j++ ){
+                    if( usedIngredients.includes(ingreds[j]["name"]) ){
+                        continue
+                    }
+                    var item = $("<li>")
+                    /*item.css({"display":"inline-block"})*/
+                    item.html(ingreds[j]["name"])
+                    ingredients.append(item)
+
+                    usedIngredients.push(ingreds[j]["name"])
                 }
+            }
 
+            ingredients.find("li").on("click",function(){
+                $(this).toggleClass("checked")
             })
+        })
+    }
+
+    function loadSearchPage(){
+        newPage('Search', function(page,insert){
+            var loadPoint = insert
+            getTemplate('search-page',function(data){
+                var el = $(data)
+                loadPoint.append(el)
+                el.find("#searchbutton").on("click",function(){
+
+                    // collect data from the form and send it on
+                    request_search(el)
+
+                })
+            })
+        }, true)
+    }
+
+    function newPage( title, func, topLevel = false ){
+        getTemplate('page',function(data){
+            var page = $(data);
+            pushPage(page, title, topLevel)
+            var loadPoint = page.find('.insert-lane');
+            func(page,loadPoint)
+        })
+    }
+
+    function newDataPage( title, func, data, topLevel = false ){
+        var pushData = data
+        getTemplate('page',function(data){
+            var page = $(data);
+            pushPage(page, title, topLevel)
+            var loadPoint = page.find('.insert-lane');
+            func(page,loadPoint, pushData)
+        })
+    }
+
+    function newNavPage( title, func, data ){
+        return newDataPage( title, func, data, false )
+    }
+
+    function newTopLevelPage( title, func, data ){
+        return newDataPage( title, func, data, true )
+    }
+    
+    var pageQueue = []
+
+    function setPageTitle(title) {
+        $("#pagetitle").html(title)
+    }
+
+    function getPageTitle(){
+        return $("#pagetitle").html()
+    }
+
+    function transitionPage(page, oldPage, loadPoint, func, title=null){
+        
+        page.hide()
+        if(oldPage.length == 0){
+            loadPoint.append(page)
+            page.fadeIn()
+            setPageTitle(title)
+            return
+        }
+        oldPage.fadeOut(()=>{
+            func()
+            loadPoint.append(page)
+            page.fadeIn()
+            setPageTitle(title)
         })
 
     }
 
-    changePage = () => {
-        // if already changing pages, abandon attempt
-        if( changingPages == true ){
-            return false
-        }
 
-        // otherwise let the world know we are about to try
-        changingPages = true;
+    function pushPage (page, title, topLevel) {
+        var lp = $("#loadpoint")
+        var oldPage = lp.children()
+        if( !topLevel ) {
+            transitionPage(page, oldPage, lp, ()=>{
+                oldPage.detach()
+                oldPage['oldPageTitle'] = getPageTitle()
+                pageQueue.push(oldPage)
+                showBackButton()
+            }, title)
+        } else {
+            transitionPage(page, oldPage, lp, ()=>{
+                oldPage.remove()
+                pageQueue.forEach((item,index) => {
+                    item.remove()
+                })
+                pageQueue = []
+            }, title)
+            hideBackButton()
+        }
+    }
+
+    function popPage(){
+        var lp = $("#loadpoint")
+        var oldPage = lp.children()
+        var newPage = pageQueue.pop()
+
+        transitionPage(newPage, oldPage, lp, ()=>{
+            oldPage.remove()
+        }, newPage['oldPageTitle'])
+
+        if( pageQueue.length == 0 ){
+            hideBackButton()
+        }
+    }
+
+    function hideBackButton() {
+        $("#backbutton").hide();
+    }
+
+    function showBackButton() {
+        $("#backbutton").show();
+    }
+
+
+    function getTemplate (template, func) {
+        $.get('templates/'+template+'.html', func)
     }
 
 
@@ -81,6 +320,7 @@ $(function(){
     
     // list of accepted cuisines from api
     var cuisines = [
+        "None",
         "African",
         "American",
         "British",
@@ -110,80 +350,61 @@ $(function(){
     ];
 
 
-    request_favorites = () => {
+    function request_favorites () {
         // this will make a request to the manetheren server
         // for a list of favorite recipes that I've cached
     }
 
     // random search
-    request_random = () => {
+    function request_random () {
         // gets a random recipe from the the actual API
     }
 
-    request_search = (query, opts) => {
-        // uses the actual API to look up a list of recipes
+    function request_single_string( id ){
+        return "http://manetheren/services/recipe/single.php?id="+id
+    }
 
-        var search_string = "?query="+query;
+    function request_search ( search_page ) {
+        var querybox = search_page.find("#searchquery");
+        var query = querybox.val()
+
+        // uses the actual API to look up a list of recipes
+        var search_string = "query="+query;
 
         // lets define the options we want to support
 
+        var number_select = search_page.find("#numberresults")
+        var number_results = number_select.val()
+        
+        search_string += "&number="+number_results
 
-        // additional
-        // default number of results
-        var number = 10;
-        // overload
-        if("number" in opts){
-            number = parseInt(opts["number"])
-            if(isNaN(number)){
-                number = 10;
+        var ingredients_group = search_page.find("[name='ingredients_group']:checked")
+        var ingredients_values = []
+        ingredients_group.each(function(){
+            ingredients_values.push($(this).val())
+        })
+
+        var ingredients_string = ""
+        while( ingredients_values.length > 0 ){
+            ingredients_string += ingredients_values.pop()
+            if( ingredients_values.length > 0 ){
+                ingredients_string += ",";
             }
         }
-        // set number search string
-        search_string += "&number="+number;
 
-        // default offset of search results
-        var offset = 0;
-        // overload
-        if("offset" in opts){
-            offset = parseInt(opts["offset"])
-            if(isNaN(offset)){
-                offset = 0;
-            }
-        }
-        search_string += "&offset="+offset;
-
-        // choose the ingredients to search for
-        var includeIngredients = null;
-        if( includeIngredients ){
-            var ingredientList = "";
-            for(var i=0; i<includeIngredients.length; i++){
-                ingredientList+=includeIngredients[i];
-                if( i < includeIngredients.length-1){
-                    ingredientList+=",";
-                }
-            }
-            search_string += "&includeIngredients="+ingredientList
-        }
-
-        // get recipe nutrition information as well 
-        // (overload API default of false)
-        var addRecipeNutrition = 'true';
-        if("addRecipeNutrition" in opts){
-            addRecipeNutrition = "addRecipeNutrition"
-        }
-        search_string += "&addRecipeNutrition="+addRecipeNutrition;
+        search_string += "&includeIngredients="+ingredients_string
 
         var queryString = request_string(search_string)
-
+        loadSearchResults( queryString )
     }
 
-    shopping_list = () => {
+    function shopping_list () {
         // uses the manetheren server to pull a list of 
         // things to buy at the grocery store
     }
 
-    request_string = ( query ) => {
-        var request_string = "https://api.spoonacular.com/recipes/complexSearch"+query+"&apiKey="+config["APIKEY"];
+    function request_string ( query ) {
+        return "http://manetheren/services/recipe/search.php?"+query
     }
 
 });
