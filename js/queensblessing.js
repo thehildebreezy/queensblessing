@@ -11,6 +11,8 @@ $(function(){
      */
     var changingPages = false;
 
+    var pageCache = {};
+
     hideBackButton()
 
     $("#backbutton").on('click',function(){
@@ -70,6 +72,12 @@ $(function(){
                 link.data("image", apiData.results[i]["image"])
                 link.data("title", apiData.results[i]["title"])
 
+                pageCache["recipe"] = {
+                    id: apiData.results[i]["id"],
+                    image: apiData.results[i]["image"],
+                    title: apiData.results[i]["title"]
+                }
+
                 link.on('click',function(){
                     var item = $(this)
                     newNavPage(item.data('title'), singleItemPage, item)
@@ -88,6 +96,29 @@ $(function(){
         var item = data;
         getTemplate('single-recipe',function(data){
             var el = $(data)
+            var favButton = el.find("#addtofavorites");
+            disableButton( favButton )
+            favButton.on("click",function(){
+                if(favButton.attr("disabled")){
+                    return
+                }
+                // send id data title image
+                $.post(
+                    "http://manetheren/services/recipe/add.php",
+                    pageCache["recipe"]
+                ).done(function(data){
+                    if(data != "success") {
+                        alert("Failed.")
+                    }
+                    disableButton(favButton)
+                    check_in_favorites( 
+                        request_favorites_string( pageCache["recipe"].id ), 
+                        favButton )
+                })
+
+            })
+
+
             fillRecipeFromApiId(el,
                 item.data("recipe"),
                 item.data("image"),
@@ -164,11 +195,18 @@ $(function(){
         var usedIngredients = []
 
         var query_string = request_single_string(id)
+        var check_in_favorites_string = request_favorites_string(id)
+
 
         $.get(query_string, function(data){
 
+            pageCache["recipe"].data = data;
+
             var apiData = JSON.parse(data)
             if( !apiData ) return;
+
+            var button = el.find("#addtofavorites")
+            check_in_favorites( check_in_favorites_string, button )
             
             var steps = apiData[0]["steps"]
 
@@ -241,6 +279,33 @@ $(function(){
 
     function setPageTitle(title) {
         $("#pagetitle").html(title)
+    }
+
+
+    function disableButton( button ){
+        button.attr("disabled",true)
+    }
+
+
+    function check_in_favorites( path, btn ){
+        var button = btn
+        $.get(path,function(data){
+            if(data == "yes" ){
+                setFavoriteButtonToRemove( button )
+            } else {
+                setFavoriteButtonToAdd( button )
+            }
+        })
+    }   
+
+    function setFavoriteButtonToAdd( button ){
+        button.attr("disabled",false)
+        button.html("Add to Favorites")
+    }
+
+    function setFavoriteButtonToRemove( button ){
+        button.attr("disabled",false)
+        button.html("Remove from Favorites")
     }
 
     function getPageTitle(){
@@ -362,6 +427,10 @@ $(function(){
 
     function request_single_string( id ){
         return "http://manetheren/services/recipe/single.php?id="+id
+    }
+    
+    function request_favorites_string( id ){
+        return "http://manetheren/services/recipe/favorite_exists.php?id="+id
     }
 
     function request_search ( search_page ) {
