@@ -26,7 +26,7 @@
                 <div class="col-2 p-0 m-0 d-flex flex-column text-shadow text-larger collapse-bar overflow-hidden text-nowrap">
                     
                     <div class="list-group rounded-0 d-flex text-white bg-transparent flex-column flex-grow-1" >
-                        <a href="#" class="list-group-item text-white border-0 bg-transparent no-underline" id="loadcards" >Favorites</a>
+                        <a href="#" class="list-group-item text-white border-0 bg-transparent no-underline" id="loadfavorites">Favorites</a>
                         <a href="#" class="list-group-item text-white border-0 bg-transparent no-underline" id="searchrecipes">Search</a>
                         <a href="#" class="list-group-item text-white border-0 bg-transparent no-underline" id="randomrecipe">Random</a>
                         <a href="#" class="list-group-item text-white border-0 bg-transparent no-underline" id="shoppinglist">Shopping</a>
@@ -39,6 +39,12 @@
 
                 </div>
                 <div class="col d-flex flex-column position-relative overflow-hidden" id="loadpoint">
+                </div>
+                
+                <div id="spinnerbox" class="position-absolute overflow-hidden d-flex justify-content-center  align-items-center" style="top: 0;left:0;right:0;bottom: 0;">
+                    <div class="spinner-border text-light" role="status">
+                        <span class="sr-only">Loading...</span>
+                    </div>
                 </div>
             </div>
         </div>

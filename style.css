@@ -94,3 +94,8 @@ a.no-underline:hover {
 .single-recipe ol li {
     margin-top: 16px;
 }
+
+#spinnerbox{
+    background-color: rgba(0, 0, 0, 0.6);
+    z-index: 99;
+}

@@ -3,17 +3,13 @@
  */
 $(function(){
 
-    /**
-     * While this variable is true, we will disable the actions of changing pages
-     * This will allow us to have some fancy transitions without worrying too much
-     * about the animations being interrupted.
-     * We are also going to skip queuing any new page requests to simplify actions
-     */
-    var changingPages = false;
 
     var pageCache = {};
 
     hideBackButton()
+
+    // initial page is favorites
+    loadFavorites()
 
     $("#backbutton").on('click',function(){
         popPage();
@@ -30,9 +26,8 @@ $(function(){
     });
 
 
-    $("#loadcards").on("click",function(){
-        // load demo
-        loadDemo();
+    $("#loadfavorites").on("click",function(){
+        loadFavorites();
     })
     
     $("#searchrecipes").on("click",function(){
@@ -41,6 +36,7 @@ $(function(){
 
     function loadSearchResults( query ){
         // layer this business
+        startTransitionIndicator()
         $.get(query, function( data ){
 
             //var apiData = JSON.parse(data)
@@ -54,6 +50,29 @@ $(function(){
 
     }
 
+    function newSingleItemLink(title, id, image){
+        var link = $("<a>");
+            link.attr('href','#')
+            link.addClass(['stretched-link','text-dark'])
+            link.html(title)
+
+            link.data("id",id)
+            link.data("image",image)
+            link.data("title",title)
+
+            link.on('click',function(){
+                var item = $(this)
+                pageCache["recipe"] = {
+                    id: item.data('id'),
+                    image: item.data('image'),
+                    title: item.data('title')
+                }
+                newNavPage(item.data('title'), singleItemPage, item)
+            })
+
+        return link
+    }
+
     function searchResultsPage(page, insert, data){
         var apiData = data
         var loadPoint = insert
@@ -63,25 +82,12 @@ $(function(){
 
             for( var i=0; i<apiData.results.length; i++ ){
                 var next = el.clone();
-                var link = $("<a>");
-                link.attr('href','#')
-                link.addClass(['stretched-link','text-dark'])
-                link.html(apiData.results[i]["title"])
 
-                link.data("recipe", apiData.results[i]["id"])
-                link.data("image", apiData.results[i]["image"])
-                link.data("title", apiData.results[i]["title"])
-
-                pageCache["recipe"] = {
-                    id: apiData.results[i]["id"],
-                    image: apiData.results[i]["image"],
-                    title: apiData.results[i]["title"]
-                }
-
-                link.on('click',function(){
-                    var item = $(this)
-                    newNavPage(item.data('title'), singleItemPage, item)
-                })
+                var link = newSingleItemLink(
+                    apiData.results[i]["title"],
+                    apiData.results[i]["id"],
+                    apiData.results[i]["image"]
+                )
 
                 next.find('.card-header').html("").append(link)
                 next.find('.card-img').attr('src',apiData.results[i]["image"])
@@ -120,7 +126,7 @@ $(function(){
 
 
             fillRecipeFromApiId(el,
-                item.data("recipe"),
+                item.data("id"),
                 item.data("image"),
                 item.data('title'))
             //fillRecipeFromApiId(el,apiData.results[i]["id"])
@@ -128,62 +134,54 @@ $(function(){
         })
     }
 
-    function loadDemo(){
-
-        // layer this business
-        $.get('js/demo.json', function( data ){
-            
-
-            //var apiData = JSON.parse(data)
-            var apiData = data;
-            if( !apiData ) return
-
-            if( apiData.results.length == 0 ) return
-
-            newPage("Favorites", function(page, insert){
-
-                var loadPoint = insert
-                getTemplate('list-card',function(data){
-
-                    var el = $(data);
-
-                    for( var i=0; i<apiData.results.length; i++ ){
-                        var next = el.clone();
-                        var link = $("<a>");
-                        link.attr('href','#')
-                        link.addClass(['stretched-link','text-dark'])
-                        link.html(apiData.results[i]["title"])
-
-                        link.data("recipe", apiData.results[i]["id"])
-                        link.data("image", apiData.results[i]["image"])
-                        link.data("title", apiData.results[i]["title"])
-
-                        link.on('click',function(){
-                            var item = $(this)
-                            newPage(item.data('title'), function(page,insert){
-                                var lp = insert;
-                                getTemplate('single-recipe',function(data){
-                                    var el = $(data)
-                                    fillRecipeFromApiId(el,
-                                        item.data("recipe"),
-                                        item.data("image"),
-                                        item.data('title'))
-                                    //fillRecipeFromApiId(el,apiData.results[i]["id"])
-                                    lp.append(el)
-                                })
-                            })
-                        })
-
-                        next.find('.card-header').html("").append(link)
-                        next.find('.card-img').attr('src',apiData.results[i]["image"])
-                        loadPoint.append(next);
-                    }
-                })
-
-            }, true)
-        })
+    function loadSingleItem( id ){
 
     }
+
+    function loadFavorites(){
+        var favs_link = request_favorites_list_string();
+
+        $.get(favs_link, function(data) {
+            var apiData = JSON.parse(data)
+            if( !apiData ) return;
+
+            //if(apiData.favorites.length == 1 ) return
+
+            newTopLevelPage("Favorites", favoritesPage, apiData)
+        })
+    }
+
+    function favoritesPage(page,insert,data){
+        var lp = insert;
+        var apiData = data.favorites;
+        getTemplate('single-recipe',function(data){
+            var el = $(data)
+
+            // load card template
+            getTemplate('list-card', function(data){
+                var card = $(data)
+
+                for( var i=0; i<apiData.length-1; i++ ){
+                    var next = card.clone()
+
+                    var link = newSingleItemLink(
+                        apiData[i]["title"],
+                        apiData[i]["id"],
+                        apiData[i]["image_path"]
+                    )
+
+
+                    next.find('.card-header').html("").append(link)
+                    next.find('.card-img').attr('src',apiData[i]["image_path"])
+                    lp.append(next);
+                }
+
+                card.remove()
+            })
+
+        })
+    }
+
     
     function fillRecipeFromApiId( el, id, image, title ){
         //el.find(".card-header").html(title)
@@ -249,16 +247,12 @@ $(function(){
     }
 
     function newPage( title, func, topLevel = false ){
-        getTemplate('page',function(data){
-            var page = $(data);
-            pushPage(page, title, topLevel)
-            var loadPoint = page.find('.insert-lane');
-            func(page,loadPoint)
-        })
+        newDataPage( title, (p,lp,d)=>{func(p,lp)}, null, topLevel )
     }
 
     function newDataPage( title, func, data, topLevel = false ){
         var pushData = data
+        startTransitionIndicator()
         getTemplate('page',function(data){
             var page = $(data);
             pushPage(page, title, topLevel)
@@ -308,6 +302,18 @@ $(function(){
         button.html("Remove from Favorites")
     }
 
+    function startTransitionIndicator(){
+        var sb = $("#spinnerbox")
+        sb.show()
+        sb.css("z-index","99")
+    }
+
+    function endTransitionIndicator(){
+        var sb = $("#spinnerbox")
+        sb.hide()
+        sb.css("z-index","-1")
+    }
+
     function getPageTitle(){
         return $("#pagetitle").html()
     }
@@ -319,6 +325,7 @@ $(function(){
             loadPoint.append(page)
             page.fadeIn()
             setPageTitle(title)
+            endTransitionIndicator()
             return
         }
         oldPage.fadeOut(()=>{
@@ -326,6 +333,7 @@ $(function(){
             loadPoint.append(page)
             page.fadeIn()
             setPageTitle(title)
+            endTransitionIndicator()
         })
 
     }
@@ -431,6 +439,14 @@ $(function(){
     
     function request_favorites_string( id ){
         return "http://manetheren/services/recipe/favorite_exists.php?id="+id
+    }
+
+    function request_favorites_list_string(){
+        return "http://manetheren/services/recipe/favorites.php"
+    }
+
+    function request_single_favorite( id ){
+        return "http://manetheren/services/recipe/favorite.php?id="+id
     }
 
     function request_search ( search_page ) {
