@@ -5,7 +5,8 @@
   "main": "index.js",
   "dependencies": {
     "electron": "^10.1.2",
-    "jquery": "^3.5.1"
+    "jquery": "^3.5.1",
+    "simple-keyboard": "^2.30.44"
   },
   "devDependencies": {},
   "scripts": {

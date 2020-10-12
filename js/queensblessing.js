@@ -1,10 +1,16 @@
 /**
  * API by https://spoonacular.com/food-api/
+ * Keyboard by https://github.com/chriscook/on-screen-keyboard
+ * 
  */
+
+
 $(function(){
 
 
     var pageCache = {};
+
+    var keyboardTarget = null;
 
     hideBackButton()
 
@@ -13,6 +19,24 @@ $(function(){
 
     $("#backbutton").on('click',function(){
         popPage();
+    })
+
+    $("input").on("click",()=>{alert("test")})
+
+    hideKeyboard();
+    $("body").on("click",(ev)=>{
+        var e = $(ev.target)
+        if( e.data("keyboard") == "open" ) return 
+        var t = $("#keyboardcontainer").has(ev.target)
+        if( t.length >= 1 ) return
+        hideKeyboard()
+    })
+
+    $(".key").on("click",(ev) => {
+        if( keyboardTarget == null ) return
+        keyboardTarget.val( keyboardTarget.val() +
+            $(ev.target).html()
+        )
     })
 
 
@@ -32,6 +56,10 @@ $(function(){
     
     $("#searchrecipes").on("click",function(){
         loadSearchPage();
+    })
+
+    $("#shoppinglist").on("click",function(){
+        loadShoppingPage()
     })
 
     function loadSearchResults( query ){
@@ -151,6 +179,10 @@ $(function(){
         })
     }
 
+    function loadShoppingPage(){
+        newTopLevelPage('Shopping List', shoppingPage, null)
+    }
+
     function favoritesPage(page,insert,data){
         var lp = insert;
         var apiData = data.favorites;
@@ -179,6 +211,29 @@ $(function(){
                 card.remove()
             })
 
+        })
+    }
+
+    function shoppingPage(page,insert,data){
+        var lp = insert;
+        getTemplate('shopping-list',function(data){
+            var el = $(data)
+            var list = el.find('.shopping-list')
+            lp.append(el)
+
+            $.get(request_full_shopping_list(),function(data){
+                
+                var apiData = JSON.parse(data)
+                if(!apiData) return
+
+                var items = apiData['shopping']
+
+                for( var i=0; i<items.length-1; i++ ){
+                    var li = $("<li>");
+                    li.html( items[i] )
+                    list.append(li)
+                }
+            })
         })
     }
 
@@ -218,6 +273,10 @@ $(function(){
                     var item = $("<li>")
                     /*item.css({"display":"inline-block"})*/
                     item.html(ingreds[j]["name"])
+                    check_in_shopping(
+                        request_in_shopping_list(ingreds[j]["name"]),
+                        item)
+                    item.data("name",ingreds[j]["name"])
                     ingredients.append(item)
 
                     usedIngredients.push(ingreds[j]["name"])
@@ -225,7 +284,17 @@ $(function(){
             }
 
             ingredients.find("li").on("click",function(){
-                $(this).toggleClass("checked")
+                var item = $(this)
+                var data = {'name':item.data("name"),'description':'placeholder'}
+                //alert(request_toggle_shopping_list(item.data("name")))
+                $.post(
+                    request_toggle_shopping_list(item.data("name")),
+                    data
+                ).done((data)=>{
+                    check_in_shopping(
+                        request_in_shopping_list(item.data("name")),
+                        item)
+                })
             })
         })
     }
@@ -235,6 +304,12 @@ $(function(){
             var loadPoint = insert
             getTemplate('search-page',function(data){
                 var el = $(data)
+                
+                var searchbox = el.find("#searchquery")
+                searchbox.on("focus",function(e){
+                    showKeyboard( e, searchbox, el )
+                })
+
                 loadPoint.append(el)
                 el.find("#searchbutton").on("click",function(){
 
@@ -300,6 +375,26 @@ $(function(){
     function setFavoriteButtonToRemove( button ){
         button.attr("disabled",false)
         button.html("Remove from Favorites")
+    }
+
+
+    function check_in_shopping( path, itm ){
+        var item = itm
+        $.get(path,function(data){
+            if(data == "yes" ){
+                setShoppingItemToRemove( item )
+            } else {
+                setShoppingItemToAdd( item )
+            }
+        })
+    }
+
+    function setShoppingItemToAdd( item ){
+        item.removeClass("checked")
+    }
+
+    function setShoppingItemToRemove( item ){
+        item.addClass("checked")
     }
 
     function startTransitionIndicator(){
@@ -383,6 +478,28 @@ $(function(){
         $("#backbutton").show();
     }
 
+    function showKeyboard( ev, input, container = null ) {
+        input.data("keyboard","open")
+        var kbc = $("#keyboardcontainer")
+        keyboardTarget = input
+        kbc.show()
+        if( container ){
+            container.css("padding-bottom",
+                kbc.height()+"px"
+            )
+        }
+    }
+
+    function hideKeyboard( ev, container = null ) {
+
+        $("#keyboardcontainer").hide()
+        if( container ){
+            container.css("padding-bottom",
+                kbc.height()+"px"
+            )
+        }
+    }
+
 
     function getTemplate (template, func) {
         $.get('templates/'+template+'.html', func)
@@ -447,6 +564,18 @@ $(function(){
 
     function request_single_favorite( id ){
         return "http://manetheren/services/recipe/favorite.php?id="+id
+    }
+
+    function request_in_shopping_list( name ){
+        return "http://manetheren/services/shopping/exists.php?name="+name
+    }
+
+    function request_toggle_shopping_list( name ){
+        return "http://manetheren/services/shopping/toggle.php?name="+name
+    }
+
+    function request_full_shopping_list(){
+        return "http://manetheren/services/shopping/all.php"
     }
 
     function request_search ( search_page ) {

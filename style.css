@@ -99,3 +99,67 @@ a.no-underline:hover {
     background-color: rgba(0, 0, 0, 0.6);
     z-index: 99;
 }
+
+#keyboardcontainer {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: #efefef;
+    box-sizing: content-box;
+    padding: 8px;
+    z-index: 100;
+}
+
+.keyboardoverlay {
+    position: absolute;
+    z-index: 99;
+    top: 0;
+    left: 0
+}
+
+.keyboard {
+    box-sizing: content-box;
+    width: 100%;
+    background:#efefef;
+  }
+  
+  .key-row {
+    display: flex;
+    margin:0 auto 7px;
+    line-height: 36px;
+  }
+  
+  .key, .arrowkey-container {
+     margin:0 6px 0 0; 
+    text-align:center;
+  }
+  
+  .key { 
+    background:#444;
+    color:#eee;
+    border-radius:4px;
+    box-shadow:0 1px 0 #222, inset 0 1px 3px rgba(255,255,255,0.1);
+    transition:0.1s;
+    align-items:center;
+    align-content:center;
+    height: 38px;
+    border:2px solid rgba(0,0,0,0.08);
+    cursor:pointer;
+  }
+  
+  sup, sub { outline:1px solid magenta; display:block; align-self:center; }
+  
+  .key:active { transform:translateY(1px); background:#333; box-shadow:0 1px 0 #000;}
+  
+  .one { flex:1; } /* one */
+  .one-one-half { flex:1.5; } /* One and one half */
+  .two { flex:2; } /* two */
+  .two-two-half { flex:2.5; } /* Two and two half */
+  .three { flex:3; } /* three */
+  .five { flex:5; }
+  
+  .key-row .key:last-child { margin:0; }
+  
+  .l { text-align:left; padding-left: 8px; }
+  .r { text-align:right; padding-right: 8px; }
